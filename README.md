@@ -31,5 +31,5 @@ To run this project on your local machine, follow these steps:
 
 ## Author
 
-Adaeze Anigbata Victoria
-Junior Frontend Developer
+**Adaeze Anigbata Victoria**<br>
+**Junior Frontend Developer**
