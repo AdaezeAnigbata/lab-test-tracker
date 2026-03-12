@@ -1,0 +1,181 @@
+import React, { useState } from "react";
+import Form from "./components/Form";
+import Input from "./components/Input";
+import Checkbox from "./components/Checkbox";
+import Button from "./components/Button";
+import Table from "./components/Table";
+import DataTable from "./components/DataTable";
+import Select from "./components/Select";
+import Textarea from "./components/TextArea";
+import Alert from "./components/Alert";
+import Card from "./components/Card";
+
+function App() {
+  const [patientName, setPatientName] = useState("");
+  const [testType, setTestType] = useState("");
+  const [notes, setNotes] = useState("");
+  const [isUrgent, setIsUrgent] = useState(false);
+  const [labQueue, setLabQueue] = useState([]);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const availableTests = [
+    "Malaria Parasite (MP)",
+    "Packed Cell Volume (PCV)",
+    "Urinalysis",
+    "Full Blood Count (FBC)",
+    "Fasting Blood Sugar (FBS)",
+    "Blood Culture",
+    "Stool m/c/s",
+    "Thyroid Function Test",
+    "Calcium",
+    "Phosphate",
+    "FOB",
+    "TSH",
+    "Genotype",
+    "Blood Group",
+    "HIV",
+    "Widal Test",
+  ];
+
+  const handleAddTest = () => {
+    if (!patientName || !testType) {
+      alert("Please enter the patient name and select a test.");
+      return;
+    }
+
+    const generatedLabId = `LAB-${String(labQueue.length + 1).padStart(3, "0")}`;
+
+    const newTest = {
+      id: Date.now(),
+      labId: generatedLabId,
+      patientName: patientName,
+      testType: testType,
+      isUrgent: isUrgent,
+      notes: notes,
+    };
+
+    setLabQueue([...labQueue, newTest]);
+
+    setAlertMessage(`${patientName}'s test was added successfully!`);
+    setTimeout(() => {
+      setAlertMessage("");
+    }, 3000);
+
+    setPatientName("");
+    setTestType("");
+    setNotes("");
+    setIsUrgent(false);
+  };
+
+  const totalTests = labQueue.length;
+  const urgentTests = labQueue.filter((test) => test.isUrgent).length;
+
+  return (
+    <div
+      style={{
+        fontFamily: "sans-serif",
+        padding: "30px",
+        maxWidth: "1200px",
+        margin: "auto",
+      }}
+    >
+      <h1
+        style={{ textAlign: "center", color: "#2c3e50", marginBottom: "30px" }}
+      >
+        Clinical Lab Test Tracker
+      </h1>
+
+      <div style={{ display: "flex", gap: "20px", marginBottom: "40px" }}>
+        <Card title="Total Pending Tests" value={totalTests} color="#007BFF" />
+        <Card title="Urgent Tests" value={urgentTests} color="#e74c3c" />
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+          gap: "40px",
+          alignItems: "start",
+        }}
+      >
+        <div>
+          <Alert message={alertMessage} />
+
+          <Form title="Log New Patient Test" onSubmit={handleAddTest}>
+            <Input
+              placeholder="Patient Name"
+              value={patientName}
+              onChange={(e) => setPatientName(e.target.value)}
+            />
+
+            <Select
+              defaultText="-- Select Test Type --"
+              options={availableTests}
+              value={testType}
+              onChange={(e) => setTestType(e.target.value)}
+            />
+
+            <Textarea
+              placeholder="Clinical Notes (e.g., Fever, Fasting)"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+
+            <Checkbox
+              label="Mark as Urgent"
+              checked={isUrgent}
+              onChange={(e) => setIsUrgent(e.target.checked)}
+            />
+            <Button label="Add to Queue" />
+          </Form>
+        </div>
+
+        <div style={{ width: "100%" }}>
+          <h2 style={{ color: "#2c3e50", marginTop: 0 }}>Current Queue</h2>
+
+          <Table headers={["Lab ID", "Patient Name", "Test Type", "Status"]}>
+            {labQueue.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="4"
+                  style={{
+                    padding: "15px",
+                    textAlign: "center",
+                    color: "#777",
+                  }}
+                >
+                  No pending tests.
+                </td>
+              </tr>
+            ) : (
+              labQueue.map((test) => (
+                <DataTable
+                  key={test.id}
+                  labId={test.labId}
+                  patientName={test.patientName}
+                  testType={test.testType}
+                  isUrgent={test.isUrgent}
+                />
+              ))
+            )}
+          </Table>
+        </div>
+      </div>
+
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: "60px",
+          paddingTop: "20px",
+          borderTop: "1px solid #ddd",
+          color: "#777",
+          fontSize: "14px",
+        }}
+      >
+        <p>Generated by Adaeze | Medical Laboratory Dashboard</p>
+      </div>
+    </div>
+  );
+}
+
+export default App;
