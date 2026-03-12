@@ -1,5 +1,21 @@
-body {
+/* 1. Fix the math for all boxes */
+* {
+  box-sizing: border-box;
+}
+
+/* 2. Lock the screen width so NOTHING can stretch it sideways */
+html,
+body,
+#root {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden; /* This is the magic lock that prevents sideways scrolling! */
+}
+
+/* 3. Your beautiful background */
+body {
   background: linear-gradient(135deg, #f4f7f6 0%, #d9e2ec 100%);
   min-height: 100vh;
 }

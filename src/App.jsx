@@ -24,17 +24,6 @@ function App() {
     "Urinalysis",
     "Full Blood Count (FBC)",
     "Fasting Blood Sugar (FBS)",
-    "Blood Culture",
-    "Stool m/c/s",
-    "Thyroid Function Test",
-    "Calcium",
-    "Phosphate",
-    "FOB",
-    "TSH",
-    "Genotype",
-    "Blood Group",
-    "HIV",
-    "Widal Test",
   ];
 
   const handleAddTest = () => {
@@ -71,10 +60,11 @@ function App() {
   const urgentTests = labQueue.filter((test) => test.isUrgent).length;
 
   return (
+    // TWEAK 1: Reduced the padding slightly so it doesn't waste space on mobile
     <div
       style={{
         fontFamily: "sans-serif",
-        padding: "30px",
+        padding: "15px",
         maxWidth: "1200px",
         margin: "auto",
       }}
@@ -85,15 +75,24 @@ function App() {
         Clinical Lab Test Tracker
       </h1>
 
-      <div style={{ display: "flex", gap: "20px", marginBottom: "40px" }}>
+      {/* TWEAK 2: Added "flexWrap: 'wrap'" so the stat cards stack gracefully on small screens */}
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          marginBottom: "40px",
+          flexWrap: "wrap",
+        }}
+      >
         <Card title="Total Pending Tests" value={totalTests} color="#007BFF" />
         <Card title="Urgent Tests" value={urgentTests} color="#e74c3c" />
       </div>
 
+      {/* TWEAK 3: Dropped the minimum column size from 350px to 280px so it fits narrow phones */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
           gap: "40px",
           alignItems: "start",
         }}
@@ -130,7 +129,8 @@ function App() {
           </Form>
         </div>
 
-        <div style={{ width: "100%" }}>
+        {/* TWEAK 4: Added "overflowX: 'auto'". This is the magic fix! It stops the table from stretching the whole page and instead creates a neat little sideways scrollbar just for the table. */}
+        <div style={{ width: "100%", overflowX: "auto" }}>
           <h2 style={{ color: "#2c3e50", marginTop: 0 }}>Current Queue</h2>
 
           <Table headers={["Lab ID", "Patient Name", "Test Type", "Status"]}>

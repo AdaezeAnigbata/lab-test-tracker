@@ -11,7 +11,7 @@ function Textarea({ placeholder, value, onChange }) {
         padding: "10px",
         borderRadius: "5px",
         border: "1px solid #ccc",
-        width: "90%",
+        width: "100%",
         marginBottom: "10px",
         fontSize: "16px",
         fontFamily: "sans-serif",
